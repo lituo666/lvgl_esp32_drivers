@@ -19,6 +19,8 @@ extern "C" {
 #include "lvgl_tft/esp_lcd_backlight.h"
 #include "lvgl_touch/touch_driver.h"
 
+#include "sdkconfig.h"
+
 /*********************
  *      DEFINES
  *********************/
@@ -37,6 +39,12 @@ extern "C" {
 #if defined (CONFIG_CUSTOM_DISPLAY_BUFFER_SIZE)
 #define DISP_BUF_SIZE   CONFIG_CUSTOM_DISPLAY_BUFFER_BYTES
 #else
+#ifndef LV_HOR_RES_MAX
+#define LV_HOR_RES_MAX CONFIG_LV_HOR_RES_MAX
+#endif // LV_HOR_RES_MAX
+#ifndef LV_VER_RES_MAX
+#define LV_VER_RES_MAX CONFIG_LV_VER_RES_MAX
+#endif // LV_VER_RES_MAX
 #if defined (CONFIG_LV_TFT_DISPLAY_CONTROLLER_ST7789)
 #define DISP_BUF_SIZE  (LV_HOR_RES_MAX * 40)
 #elif defined CONFIG_LV_TFT_DISPLAY_CONTROLLER_ST7735S
