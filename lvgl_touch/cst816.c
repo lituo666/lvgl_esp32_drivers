@@ -84,9 +84,7 @@ bool cst816_read(lv_indev_drv_t *drv, lv_indev_data_t *data) {
     // }
     // printf("\r\n");
 
-    uint8_t gestureID = data_raw[0];
     uint8_t points = data_raw[1];
-    uint8_t event = data_raw[2] >> 6;
     uint16_t point_x = 0;
     uint16_t point_y = 0;
     if(points == 0)
@@ -119,6 +117,8 @@ bool cst816_read(lv_indev_drv_t *drv, lv_indev_data_t *data) {
     data->point.y = point_y;
 
 #if CONFIG_LV_COORD_OUTPUT_CST816
+    uint8_t gestureID = data_raw[0];
+    uint8_t event = data_raw[2] >> 6;
     ESP_LOGI(TAG, "gestureID %d, points %d, event %d X=%u Y=%u", gestureID, points, event, data->point.x, data->point.y);
 #endif
     
