@@ -11,6 +11,13 @@
 #include "driver/gpio.h"
 #include "esp_log.h"
 #include "soc/ledc_periph.h" // to invert LEDC output on IDF version < v4.3
+#include "soc/gpio_sig_map.h"   // IDF version >= v5.0 need
+
+#if CONFIG_IDF_TARGET_ESP32
+#include "esp32/rom/gpio.h"     // IDF version >= v5.0 need
+#elif CONFIG_IDF_TARGET_ESP32C3
+#include "esp32c3/rom/gpio.h"     // IDF version >= v5.0 need
+#endif
 
 typedef struct {
     bool pwm_control; // true: LEDC is used, false: GPIO is used
@@ -49,7 +56,7 @@ disp_backlight_h disp_backlight_new(const disp_backlight_config_t *config)
         };
         const ledc_timer_config_t LCD_backlight_timer = {
             .speed_mode = LEDC_LOW_SPEED_MODE,
-            .bit_num = LEDC_TIMER_10_BIT,
+            .duty_resolution = LEDC_TIMER_10_BIT,
             .timer_num = config->timer_idx,
             .freq_hz = 5000,
             .clk_cfg = LEDC_AUTO_CLK};

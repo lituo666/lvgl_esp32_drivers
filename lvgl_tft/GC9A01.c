@@ -13,6 +13,12 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
+#if CONFIG_IDF_TARGET_ESP32
+#include "esp32/rom/gpio.h"     // IDF version >= v5.0 need
+#elif CONFIG_IDF_TARGET_ESP32C3
+#include "esp32c3/rom/gpio.h"     // IDF version >= v5.0 need
+#endif
+
 /*********************
  *      DEFINES
  *********************/
@@ -134,7 +140,7 @@ void GC9A01_init(void)
 		GC9A01_send_cmd(GC_init_cmds[cmd].cmd);
 		GC9A01_send_data(GC_init_cmds[cmd].data, GC_init_cmds[cmd].databytes&0x1F);
 		if (GC_init_cmds[cmd].databytes & 0x80) {
-			vTaskDelay(100 / portTICK_RATE_MS);
+			vTaskDelay(100 / portTICK_PERIOD_MS);
 		}
 		cmd++;
 	}
